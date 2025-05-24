@@ -19,3 +19,10 @@ spring:
 
 encrypt:
   key: "102529799898956164497979ADSE578"
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
