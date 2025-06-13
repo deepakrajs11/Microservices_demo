@@ -102,7 +102,7 @@
                 <version>3.4.2</version>
                 <configuration>
                     <to>
-                        <image>deepakraj11/loansdemo:v2</image>
+                        <image>deepakraj11/loansdemo:v6</image>
                     </to>
                 </configuration>
             </plugin>

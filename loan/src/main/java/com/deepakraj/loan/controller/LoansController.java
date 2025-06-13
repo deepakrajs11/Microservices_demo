@@ -22,6 +22,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.logging.Logger;
+
 /**
  * @author Eazy Bytes
  */
@@ -35,7 +37,6 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @Validated
 public class LoansController {
-
     private ILoansService iLoansService;
 
     @Autowired
@@ -189,6 +190,7 @@ public class LoansController {
     )
     @GetMapping("/contact-info")
     public ResponseEntity<LoansContactInfoDto> getContactInfo() {
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(loansContactInfoDto);

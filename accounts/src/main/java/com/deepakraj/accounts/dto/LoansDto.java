@@ -1,5 +1,4 @@
-package com.deepakraj.loan.dto;
-
+package com.deepakraj.accounts.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;

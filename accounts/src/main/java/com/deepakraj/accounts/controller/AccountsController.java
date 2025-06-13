@@ -2,17 +2,20 @@ package com.deepakraj.accounts.controller;
 import com.deepakraj.accounts.constants.AccountsConstants;
 import com.deepakraj.accounts.dto.*;
 import com.deepakraj.accounts.service.IAccountsService;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 )
 public class AccountsController {
     private IAccountsService iAccountsService;
+    private static final Logger logger = LoggerFactory.getLogger(AccountsController.class);
     public AccountsController(IAccountsService iAccountsService){
         this.iAccountsService=iAccountsService;
     }
@@ -176,10 +180,31 @@ public class AccountsController {
             )
     }
     )
+    @Retry(name = "getcontactInfo",fallbackMethod = "getContactInfoFallBack")
     @GetMapping("/contact-info")
     public ResponseEntity<AccountsContactInfoDto> getContactInfo() {
+        logger.debug("getContactInfo triggered");
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(accountsContactInfoDto);
     }
+
+    public ResponseEntity<AccountsContactInfoDto> getContactInfoFallBack(Throwable throwable) {
+        logger.debug("getContactInfoFallBack triggered");
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new AccountsContactInfoDto());
+    }
+
+
+    @Value("${java-version}")
+    private String version;
+    @RateLimiter(name = "javaversion",fallbackMethod = "getjavaversionFallBack")
+    @GetMapping("/javaversion")
+    public ResponseEntity<String> getjavaverion(){
+        return ResponseEntity.status(HttpStatus.OK).body(version);
+    }
+
+    public ResponseEntity<String> getjavaversionFallBack(Throwable throwable){return ResponseEntity.status(HttpStatus.OK).body("Too many request per second");}
+
 }

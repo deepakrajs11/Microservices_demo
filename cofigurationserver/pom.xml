@@ -69,7 +69,7 @@
 				<version>3.4.2</version>
 				<configuration>
 					<to>
-						<image>deepakraj11/configserverdemo:v3</image>
+						<image>deepakraj11/configserverdemo:v6</image>
 					</to>
 				</configuration>
 			</plugin>
